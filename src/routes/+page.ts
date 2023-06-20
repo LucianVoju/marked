@@ -7,11 +7,11 @@ export const load = (async ({ params, fetch }) => {
 
 	const tokens = marked.lexer(text);
 
-	function extractTimestampsAndText(text: string) {
+	const extractTimestampsAndText = (text: string) => {
 		const regex = /<!-- \[t(\d{2}:\d{2}:\d{2})\] --> (.*?) <!-- \[t(\d{2}:\d{2}:\d{2})\] -->/g;
 		const matches = text.matchAll(regex);
 
-		const result = [];
+		const result: { time: string; text: string }[] = [];
 
 		for (const match of matches) {
 			const timeStart = match[1];
@@ -25,30 +25,18 @@ export const load = (async ({ params, fetch }) => {
 		}
 
 		return result;
-	}
+	};
 
-	const data = tokens.map((token) => {
-		if (token.type === 'heading') {
-			return {
-				type: 'heading',
-				text: token.text
-			};
-		}
-
+	marked.walkTokens(tokens, (token) => {
 		if (token.type === 'html') {
-			return {
-				type: 'paragraph',
-				text: extractTimestampsAndText(token.text)
-			};
+			token.type = 'paragraph';
+			token.paragraphData = extractTimestampsAndText(token.text);
 		}
 	});
 
-	console.log(data);
+	console.log(tokens);
 
 	return {
-		post: {
-			title: `Title for ${params.slug} goes here`,
-			content: `Content for ${params.slug} goes here`
-		}
+		tokens
 	};
 }) satisfies PageLoad;
