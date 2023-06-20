@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fly } from 'svelte/transition';
 	import type { PageData } from './$types';
 
 	import Heading from '$lib/components/Heading.svelte';
@@ -25,15 +26,17 @@
 		<dl class="">
 			<div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
 				<dt class="truncate text-sm font-medium text-gray-500">Selected timestamp</dt>
-				<dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-					{selectedTimeStamp}
-				</dd>
+				{#key selectedTimeStamp}
+					<dd in:fly={{ y: -10 }} class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+						{selectedTimeStamp}
+					</dd>
+				{/key}
 			</div>
 		</dl>
 	</div>
 
 	<main class="container">
-		<div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+		<div class="mx-auto max-w-7xl px-6 lg:px-8">
 			<div class="mt-16 max-w-2xl">
 				{#each tokens as token}
 					{#if token.type === 'heading'}

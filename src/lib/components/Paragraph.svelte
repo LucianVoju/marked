@@ -7,7 +7,7 @@
 </script>
 
 <p
-	class="pt-6 selection:bg-fuchsia-300 selection:text-fuchsia-900"
+	class="pt-6 selection:bg-fuchsia-300 selection:text-fuchsia-900 prose"
 	on:mousedown={() => dispatch('paragraph-clicked', { timestamp: token.paragraphData[0].time })}
 >
 	{#each token.paragraphData as data}

@@ -31,8 +31,6 @@ export const load = (async ({ params, fetch }) => {
 		}
 	});
 
-	// console.log(tokens);
-
 	return {
 		tokens
 	};
