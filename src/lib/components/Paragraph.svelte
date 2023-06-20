@@ -13,7 +13,7 @@
 	{#each token.paragraphData as data}
 		<span
 			on:mousedown|stopPropagation={() => dispatch('paragraph-clicked', { timestamp: data.time })}
-			>{data.text}</span
-		>
+			>{data.text}
+		</span>
 	{/each}
 </p>

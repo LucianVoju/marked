@@ -8,23 +8,20 @@ export const load = (async ({ params, fetch }) => {
 	const tokens = marked.lexer(text);
 
 	const extractTimestampsAndText = (text: string) => {
-		const regex = /<!-- \[t(\d{2}:\d{2}:\d{2})\] --> (.*?) <!-- \[t(\d{2}:\d{2}:\d{2})\] -->/g;
-		const matches = text.matchAll(regex);
+		const regex = /<!-- \[t(\d{2}:\d{2}:\d{2})\] -->(.*?)(?=<!-- \[t(\d{2}:\d{2}:\d{2})\] -->|$)/g;
+		const matches = [];
+		let match;
 
-		const result: { time: string; text: string }[] = [];
-
-		for (const match of matches) {
+		while ((match = regex.exec(text)) !== null) {
 			const timeStart = match[1];
-			const timeEnd = match[3];
 			const text = match[2].trim();
-
-			result.push({
+			matches.push({
 				time: `[t${timeStart}]`,
 				text: text
 			});
 		}
 
-		return result;
+		return matches;
 	};
 
 	marked.walkTokens(tokens, (token) => {
@@ -34,7 +31,7 @@ export const load = (async ({ params, fetch }) => {
 		}
 	});
 
-	console.log(tokens);
+	// console.log(tokens);
 
 	return {
 		tokens
